@@ -3,8 +3,8 @@ var app = require("./app");
 var port = process.env.PORT || 3000;
 const projectRoutes = require("./routes/project.route");
 const multer = require("multer");
-const ResponseHelper = require("./helpers/construct-response-objects");
 
+app.use(express.static("api-spec"));
 app.use(express.json());
 
 app.use("/api/v1/projects", projectRoutes);

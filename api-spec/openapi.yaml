@@ -1,0 +1,419 @@
+openapi: 3.0.3
+
+info:
+  {
+    "title": "Fieldwire Take Home API Spec",
+    "description": "API Spec for take home test.",
+    "contact": { "name": "Bhavya Bansal", "email": "bhavyabnsl07@gmail.com" },
+    "version": "1.0.0",
+  }
+
+servers:
+  - url: /api/v1
+
+tags:
+  - name: Projects
+    description: Projects Operations
+  - name: Floorplans
+    description: Floorplans Operations
+
+paths:
+  "/projects":
+    get:
+      tags: ["Projects"]
+      summary: Returns all projects.
+      responses:
+        "200":
+          description: Listing all projects
+          content:
+            application/json: # Reponse is returned in JSON
+              schema:
+                $ref: "#/components/schemas/projects"
+
+        "400":
+          $ref: "#/components/responses/BadRequest"
+          example:
+
+        "404":
+          $ref: "#/components/responses/ResourceNotFound"
+
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+    post:
+      tags: ["Projects"]
+      summary: Create a new project
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/project-request-body"
+            example:
+              name: Durham
+        required: true
+      responses:
+        "200":
+          description: User can create a new project
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/projects-with-no-floorplan"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+        "404":
+          $ref: "#/components/responses/ResourceNotFound"
+
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  "/projects/{id}":
+    parameters:
+      - name: id
+        in: path
+        description: ID of the project
+        required: true
+        schema:
+          type: string
+    get:
+      tags: ["Projects"]
+      summary: Get a project
+      responses:
+        "200":
+          description: List project with given id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/singleProject"
+
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+        "404":
+          $ref: "#/components/responses/ResourceNotFound"
+
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+    delete:
+      tags: ["Projects"]
+      summary: Delete a project
+      responses:
+        "200":
+          description: Delete project with given id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/success"
+
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+        "404":
+          $ref: "#/components/responses/ResourceNotFound"
+
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+    patch:
+      tags: ["Projects"]
+      summary: Patch a project
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/project-request-body"
+            example:
+              name: Durham
+        required: true
+      responses:
+        "200":
+          description: Delete project with given id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/singleProject"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+        "404":
+          $ref: "#/components/responses/ResourceNotFound"
+
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  "/projects/{projectId}/floorplans":
+    parameters:
+      - name: projectId
+        in: path
+        description: ID of the project
+        required: true
+        schema:
+          type: string
+    get:
+      tags: ["Floorplans"]
+      summary: Returns all floorplans for a given project ID.
+      responses:
+        "200":
+          description: Listing all floorplans for a given project ID
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/floorplans-for-given-project"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+        "404":
+          $ref: "#/components/responses/ResourceNotFound"
+
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+    post:
+      tags: ["Floorplans"]
+      summary: Create and add floorplan to project
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/floorplan-request-body"
+        required: true
+      responses:
+        "200":
+          description: Create floorplan and link to project with given id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/floorplan-for-given-project"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+        "404":
+          $ref: "#/components/responses/ResourceNotFound"
+
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  "/projects/{projectId}/floorplans/{floorplanId}":
+    parameters:
+      - name: projectId
+        in: path
+        description: ID of the project
+        required: true
+        schema:
+          type: string
+      - name: floorplanId
+        in: path
+        description: ID of the floorplan
+        required: true
+        schema:
+          type: string
+
+    get:
+      tags: ["Floorplans"]
+      summary: Get floorplan with floorplanId for a given project ID
+      responses:
+        "200":
+          description: Fetch specific floorplan for given project
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/floorplan-for-given-project"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+        "404":
+          $ref: "#/components/responses/ResourceNotFound"
+
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+    delete:
+      tags: ["Floorplans"]
+      summary: Delete floorplan with floorplanId for a given project ID
+      responses:
+        "200":
+          description: Delete floorplan for given project
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/success"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+        "404":
+          $ref: "#/components/responses/ResourceNotFound"
+
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+    patch:
+      tags: ["Floorplans"]
+      summary: Update floorplan with floorplanId for a given project ID
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/floorplan-request-body"
+        required: true
+      responses:
+        "200":
+          description: Update floorplan for given project
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/floorplan-for-given-project"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+        "404":
+          $ref: "#/components/responses/ResourceNotFound"
+
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+components:
+  responses:
+    BadRequest:
+      description: The request is invalid
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/error-response"
+
+    ResourceNotFound:
+      description: The requested resource is not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/error-response"
+
+    InternalServerError:
+      description: Internal Server error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/error-response"
+
+  schemas:
+    projects:
+      type: object
+      properties:
+        projects:
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: id of the project
+              name:
+                type: string
+                description: name of the project
+              floorPlans:
+                items:
+                  $ref: "#/components/schemas/floorplan"
+                type: array
+          type: array
+
+    singleProject:
+      type: object
+      properties:
+        project:
+          type: object
+          properties:
+            id:
+              type: string
+              description: id of the project
+            name:
+              type: string
+              description: name of the project
+            floorPlans:
+              items:
+                $ref: "#/components/schemas/floorplan"
+              type: array
+
+    projects-with-no-floorplan:
+      type: object
+      properties:
+        project:
+          type: object
+          properties:
+            id:
+              type: string
+              description: id of the project
+            name:
+              type: string
+              description: name of the project
+            floorPlans:
+              example: []
+              type: array
+
+    project-request-body:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the project to be created
+          maxLength: 10
+      required:
+        - name
+
+    floorplan:
+      type: object
+      properties:
+        id:
+          type: string
+          description: id of the floorplan
+        name:
+          type: string
+          description: name of the floorplan
+        originalImageUrl:
+          type: string
+          description: S3 hosted URL for original uploaded image
+        thumbnailImageUrl:
+          type: string
+          description: S3 hosted URL for thumbnail size image
+        largeSizeImageUrl:
+          type: string
+          description: S3 hosted URL for large size image
+
+    floorplans-for-given-project:
+      type: object
+      properties:
+        floorplans:
+          items:
+            $ref: "#/components/schemas/floorplan"
+          type: array
+
+    floorplan-for-given-project:
+      type: object
+      properties:
+        floorplan:
+          $ref: "#/components/schemas/floorplan"
+
+    floorplan-request-body:
+      type: object
+      properties:
+        file:
+          type: string
+          description: Floorplan image to upload
+          format: binary
+        name:
+          type: string
+          description: Name of the floorplan
+      required:
+        - file
+
+    success:
+      type: object
+      properties:
+        message:
+          type: string
+          description: success message from the backend service
+
+    error-response:
+      type: object
+      properties:
+        error:
+          type: string
+          description: error message from backend service

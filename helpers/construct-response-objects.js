@@ -1,18 +1,16 @@
-const getErrorResponse = (statusCode, errorMessage) => {
-    return {
-        statusCode,
-        errorMessage
-    }
-}
+const getErrorResponse = (errorMessage) => {
+  return {
+    error: errorMessage,
+  };
+};
 
-const getSuccessResponse = (statusCode, data) => {
-    return {
-        statusCode,
-        data
-    }
-}
+const getSuccessResponse = (data) => {
+  return {
+    data,
+  };
+};
 
 module.exports = {
-    getErrorResponse,
-    getSuccessResponse
-}
+  getErrorResponse,
+  getSuccessResponse,
+};

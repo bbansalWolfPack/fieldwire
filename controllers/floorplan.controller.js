@@ -1,65 +1,113 @@
-const FloorplanService = require('../services/floorplan.service');
-const FloorplanHelper = require('../helpers/floorplan.helper');
-const ResponseHelper = require('../helpers/construct-response-objects');
+const FloorplanService = require("../services/floorplan.service");
+const FloorplanHelper = require("../helpers/floorplan.helper");
+const ResponseHelper = require("../helpers/construct-response-objects");
 
 let FloorplanController = {
-    getAllFloorPlansForGivenProject: async (req, res) => {
-        const projectId = req.params.id;
-        try {
-            const allFloorplansForGivenProject = await FloorplanService.findAllFloorplans(projectId);
-            res.send(FloorplanHelper.createAllFloorplanResponse(allFloorplansForGivenProject));
-        } catch(error) {
-            res.send(ResponseHelper.getErrorResponse(error.statusCode, error.message));
-        }
-    },
-
-    getSpecificFloorplanForGivenProject: async (req, res) => {
-        const floorplanId = req.params.floorplanId;
-        const projectId = req.params.id;
-        try {
-            const result = await FloorplanService.findFloorplan(projectId, floorplanId);
-            let responseObject = FloorplanHelper.createFloorPlanResponse(result);
-            responseObject = {
-                statusCode: responseObject.statusCode,
-                projectId,
-                data: responseObject.data
-            }
-            res.send(responseObject);
-        } catch (error) {
-            res.send(ResponseHelper.getErrorResponse(error.statusCode, error.message));
-        }
-    },
-
-    deleteSpecificFloorplanForGivenProject: async (req, res) => {
-        const floorplanId = req.params.floorplanId;
-        const projectId = req.params.id;
-
-        try {
-            await FloorplanService.deleteFloorplanById(projectId, floorplanId);
-            res.send({
-                statusCode: 200,
-                message: `Floorplan with id: ${floorplanId} deleted Succesfully`
-            });
-        } catch (error) {
-            res.send(ResponseHelper.getErrorResponse(error.statusCode, error.message));
-        }
-    },
-
-    createFloorplanForGivenProject: async (req, res) => {
-        const projectId = req.params.id;
-        const file = req.file;
-        if (!file) {
-            res.send(ResponseHelper.getErrorResponse(400, "Floorplan image missing from request body"));
-            return;
-        } else {
-            try {
-                const result = await FloorplanService.addFloorplan(projectId, file);
-                res.send(FloorplanHelper.createFloorPlanResponse(result));
-            } catch (error) {
-                res.send(ResponseHelper.getErrorResponse(error.statusCode, error.message));
-            }
-        }
+  getAllFloorPlansForGivenProject: async (req, res) => {
+    const projectId = req.params.id;
+    try {
+      const allFloorplansForGivenProject =
+        await FloorplanService.findAllFloorplans(projectId);
+      res
+        .status(200)
+        .send(
+          FloorplanHelper.createAllFloorplanResponse(
+            allFloorplansForGivenProject
+          )
+        );
+    } catch (error) {
+      res
+        .status(error.statusCode)
+        .send(ResponseHelper.getErrorResponse(error.message));
     }
-}
+  },
+
+  getSpecificFloorplanForGivenProject: async (req, res) => {
+    const floorplanId = req.params.floorplanId;
+    const projectId = req.params.id;
+    try {
+      const result = await FloorplanService.findFloorplanById(
+        projectId,
+        floorplanId
+      );
+      let responseObject = FloorplanHelper.createFloorPlanResponse(result);
+      res.status(200).send(responseObject);
+    } catch (error) {
+      res
+        .status(error.statusCode)
+        .send(ResponseHelper.getErrorResponse(error.message));
+    }
+  },
+
+  deleteSpecificFloorplanForGivenProject: async (req, res) => {
+    const floorplanId = req.params.floorplanId;
+    const projectId = req.params.id;
+
+    try {
+      await FloorplanService.deleteFloorplanById(projectId, floorplanId);
+      res
+        .status(200)
+        .send(
+          ResponseHelper.getErrorResponse(
+            `Floorplan with id: ${floorplanId} deleted Succesfully`
+          )
+        );
+    } catch (error) {
+      res
+        .status(error.statusCode)
+        .send(ResponseHelper.getErrorResponse(error.message));
+    }
+  },
+
+  createFloorplanForGivenProject: async (req, res) => {
+    const projectId = req.params.id;
+    const floorplan = req.file;
+    const floorplanName =
+      req.body.name || floorplan.originalname.replace(/\.[^/.]+$/, "");
+    if (!floorplan) {
+      res.status(400).send("Floorplan missing from request body");
+      return;
+    } else {
+      try {
+        const result = await FloorplanService.addFloorplan(
+          floorplanName,
+          projectId,
+          floorplan
+        );
+        res.status(200).send(FloorplanHelper.createFloorPlanResponse(result));
+      } catch (error) {
+        res
+          .status(error.statusCode)
+          .send(ResponseHelper.getErrorResponse(error.message));
+      }
+    }
+  },
+
+  updateFloorplanForGivenProject: async (req, res) => {
+    const projectId = req.params.id;
+    const floorplanId = req.params.floorplanId;
+    const floorplan = req.file;
+    const floorplanName =
+      req.body.name || floorplan.originalname.replace(/\.[^/.]+$/, "");
+    if (!floorplan) {
+      res.status(400).send("Floorplan missing from request body");
+      return;
+    } else {
+      try {
+        const result = await FloorplanService.updateFloorplan(
+          floorplanId,
+          floorplanName,
+          projectId,
+          floorplan
+        );
+        res.status(200).send(FloorplanHelper.createFloorPlanResponse(result));
+      } catch (error) {
+        res
+          .status(error.statusCode)
+          .send(ResponseHelper.getErrorResponse(error.message));
+      }
+    }
+  },
+};
 
 module.exports = FloorplanController;

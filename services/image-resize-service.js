@@ -5,9 +5,10 @@ async function resizeImage(imageBuffer, width, height) {
     const resizedImageBuffer = await sharp(imageBuffer)
       .resize({
         width: width,
-        height: height
-      }).toBuffer();
-    return resizedImageBuffer
+        height: height,
+      })
+      .toBuffer();
+    return resizedImageBuffer;
   } catch (error) {
     throw error;
   }

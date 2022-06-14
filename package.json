@@ -1,0 +1,25 @@
+{
+  "name": "project-management",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start-development": "nodemon server.js",
+    "start-production": "forever start server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.1152.0",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "express-validator": "^6.14.1",
+    "mongoose": "^6.3.6",
+    "multer": "^1.4.5-lts.1",
+    "sharp": "^0.30.6"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16"
+  }
+}

@@ -62,12 +62,12 @@ let FloorplanController = {
   createFloorplanForGivenProject: async (req, res) => {
     const projectId = req.params.id;
     const floorplan = req.file;
-    const floorplanName =
-      req.body.name || floorplan.originalname.replace(/\.[^/.]+$/, "");
     if (!floorplan) {
       res.status(400).send("Floorplan missing from request body");
       return;
     } else {
+      const floorplanName =
+      req.body.name || floorplan.originalname.replace(/\.[^/.]+$/, "");
       try {
         const result = await FloorplanService.addFloorplan(
           floorplanName,

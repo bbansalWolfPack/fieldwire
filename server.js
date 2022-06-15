@@ -1,6 +1,6 @@
 var express = require("express");
 var app = require("./app");
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 8080;
 const projectRoutes = require("./routes/project.route");
 const multer = require("multer");
 

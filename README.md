@@ -38,7 +38,7 @@ MONGO_STRING="<MONGO DB Database Connection String>"
 - [Commands](#commands)
 - [Project Structure](#project-structure)
 - [API Documentation](#api-documentation)
-- [Accessing Deployed Application][access-application]
+- [Accessing Deployed Application][#access-application]
 - [User workflows](#user-workflows)
 - [Error Handling](#error-handling)
 - [Validation](#validation)

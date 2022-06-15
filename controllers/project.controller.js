@@ -7,20 +7,24 @@ let ProjectController = {
   getAllProjects: async (_req, res) => {
     try {
       const allProjects = await ProjectService.findAllProjects();
-      res.send(ProjectHelper.createAllProjectsResponse(allProjects));
+      res
+        .status(200)
+        .send(ProjectHelper.createAllProjectsResponse(allProjects));
     } catch (error) {
-      res.send(
-        ResponseHelper.getErrorResponse(error.statusCode, error.message)
-      );
+      res
+        .status(error.statusCode)
+        .send(ResponseHelper.getErrorResponse(error.message));
     }
   },
 
   getProjectById: async (req, res, next) => {
     try {
       const project = await ProjectService.findProjectById(req.params.id);
-      res.send(ProjectHelper.createProjectResponse(project));
+      res.status(200).send(ProjectHelper.createProjectResponse(project));
     } catch (error) {
-      next(error);
+      res
+        .status(error.statusCode)
+        .send(ResponseHelper.getErrorResponse(error.message));
     }
   },
 
@@ -28,14 +32,14 @@ let ProjectController = {
     const validationResults = validationResult(req);
     if (!validationResults.isEmpty()) {
       res
-        .status(404)
+        .status(400)
         .send(ResponseHelper.getErrorResponse(validationResults.errors[0].msg));
       return;
     }
     const projectName = req.body.name;
     try {
       const project = await ProjectService.createAndSaveProject(projectName);
-      res.send(ProjectHelper.createProjectResponse(project));
+      res.status(200).send(ProjectHelper.createProjectResponse(project));
     } catch (error) {
       res
         .status(error.statusCode)
@@ -51,18 +55,18 @@ let ProjectController = {
         message: `Project with id: ${projectId} deleted Succesfully`,
       });
     } catch (error) {
-      res.send(
-        ResponseHelper.getErrorResponse(error.statusCode, error.message)
-      );
+      res
+        .status(error.statusCode)
+        .send(ResponseHelper.getErrorResponse(error.message));
     }
   },
 
   patchProject: async (req, res) => {
     const validationResults = validationResult(req);
     if (!validationResults.isEmpty()) {
-      res.send(
-        ResponseHelper.getErrorResponse(404, validationResults.errors[0].msg)
-      );
+      res
+        .status(404)
+        .send(ResponseHelper.getErrorResponse(validationResults.errors[0].msg));
       return;
     }
     const projectId = req.params.id;

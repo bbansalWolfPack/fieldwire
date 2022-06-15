@@ -28,7 +28,7 @@ const createAndSaveProject = async (projectName) => {
       error.code === 11000
         ? `Project by name ${projectName} already exists`
         : error.message;
-    const statusCode = error.code === 11000 ? 404 : 500;
+    const statusCode = error.code === 11000 ? 400 : 500;
     throw new CustomError(statusCode, errorMessage);
   }
 };
@@ -77,6 +77,9 @@ const deleteProjectById = async (projectId) => {
       );
     }
   } catch (error) {
+    if (error.statusCode !== 500) {
+      throw error;
+    }
     throw new CustomError(500, `Error deleting project: ${error.message}`);
   }
 };

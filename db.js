@@ -1,7 +1,7 @@
 require("dotenv").config();
 var mongoose = require("mongoose");
 
-const mongoString = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@fieldwire.jz5gk.mongodb.net/?retryWrites=true&w=majority`;
+const mongoString = process.env.MONGO_STRING;
 mongoose.connect(mongoString);
 
 const database = mongoose.connection;

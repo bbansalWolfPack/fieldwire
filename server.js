@@ -22,3 +22,5 @@ app.use((err, _req, res, _next) => {
 app.listen(port, function () {
   console.log("Express server listening on port " + port);
 });
+
+module.exports = app;

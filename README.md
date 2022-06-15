@@ -38,6 +38,7 @@ MONGO_STRING="<MONGO DB Database Connection String>"
 - [Commands](#commands)
 - [Project Structure](#project-structure)
 - [API Documentation](#api-documentation)
+- [Accessing Deployed Application][access-application]
 - [User workflows](#user-workflows)
 - [Error Handling](#error-handling)
 - [Validation](#validation)
@@ -103,6 +104,12 @@ fieldwire\
 
 To view the list of available APIs and their specifications, run the server and go to `http://localhost:3000` in your browser. This documentation page is automatically generated using the open-api spec definitions. I have also hosted the API spec on Amazon EC2 instance: [API SPEC](http://3.87.217.73:8080/)
 
+## Accessing Deployed Application
+
+I have deployed the REST server on an EC2 instance. One can use postman to test API calls.
+REST Server: http://3.87.217.73
+
+Example: to get all projects: http://3.87.217.73/api/v1/projects
 
 ## User Workflows
 

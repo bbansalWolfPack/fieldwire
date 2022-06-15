@@ -48,6 +48,7 @@ MONGO_STRING="<MONGO DB Database Connection String>"
 ## Features
 
 - **NoSQL database**: [MongoDB](https://www.mongodb.com) object data modeling using [Mongoose](https://mongoosejs.com)
+- **Image Processing**: Multr and sharp: Used Multr to store image in memory and used sharp to resize images
 - **Validation**: request validation using express-validator
 - **Testing**: testing basic route behaviors with help of mocha, chai and supertest
 - **Error handling**: centralized error handling mechanism
